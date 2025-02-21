@@ -8,6 +8,6 @@ A hybrid neural network combining Transformer and Graph Neural Network (GNN) for
 - **High Fidelity**: Achieves 98.5% reconstruction fidelity.
 
 
-# Results
+## Results
 Fidelity: 98.5%
 Improvement: 15% over traditional methods
