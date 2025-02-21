@@ -9,32 +9,30 @@ class HQCNN(nn.Module):
         self.num_qubits = num_qubits
         self.hidden_dim = hidden_dim
         
-        # Transformer 模块
+        # Transformer
         self.transformer = TransformerEncoder(
             embed_dim=hidden_dim,
             num_heads=num_heads,
             num_layers=num_layers
         )
         
-        # GNN 模块
+        # GNN
         self.gnn = GNN(
             node_dim=hidden_dim,
-            edge_dim=1,  # 边特征维度
+            edge_dim=1,
             hidden_dim=hidden_dim,
             num_layers=3
         )
         
-        # 输出层
         self.output_layer = nn.Linear(hidden_dim, num_qubits * num_qubits)
     
     def forward(self, node_features, edge_index, edge_weights):
-        # Transformer 处理节点特征
+        # Transformer
         node_embeddings = self.transformer(node_features)
         
-        # GNN 处理图结构
+        # GNN
         graph_embeddings = self.gnn(node_embeddings, edge_index, edge_weights)
-        
-        # 输出重构的量子态密度矩阵
+
         output = self.output_layer(graph_embeddings)
         density_matrix = output.view(-1, self.num_qubits, self.num_qubits)
         return density_matrix
